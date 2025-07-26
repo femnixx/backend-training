@@ -16,6 +16,11 @@ const corsOptions = {
 app.use(cors());
 app.use('/api', router);
 
+// basic root route
+app.get('/', (req, res) => {
+    res.send('Welcome to the Express API');
+})
+
 
 app.use(cors(corsOptions));
 const port = 5000;
