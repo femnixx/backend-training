@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError, initializeApp } from "firebase/app";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const auth = getAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +22,7 @@ const LoginPage = () => {
       const user = userCredentials.user;
       window.alert("Successfully logged in!");
       console.log("Successfully logged in with user: " + { user });
+      navigate("/");
     } catch (err) {
       if (err == FirebaseError) {
         window.alert("Firebase error: " + err);
