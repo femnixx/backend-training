@@ -1,6 +1,11 @@
+import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <>
       <div className=" bg-gray-400 ms-4">
@@ -27,6 +32,14 @@ const LoginPage = () => {
               placeholder="****"
             />
           </div>
+          <p>
+            Don't have an account?{" "}
+            <Link to="/signup">
+              <strong className="hover:underline font-normal hover:font-semibold hover:cursor-pointer">
+                Click here
+              </strong>
+            </Link>
+          </p>
         </div>
       </div>
     </>
