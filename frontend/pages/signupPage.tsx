@@ -2,8 +2,10 @@ import { Outlet, Link } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { FirebaseError, initializeApp } from "firebase/app";
+import { useNavigate } from "react-router-dom";
 
 const signupPage = () => {
+  const navigate = useNavigate();
   const auth = getAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -21,6 +23,7 @@ const signupPage = () => {
       const user = userCredential.user;
       console.log("User successfully created");
       alert("Sign up successful!");
+      navigate("/login");
     } catch (err) {
       if (err == FirebaseError) {
         window.alert("Firebase error: " + err);
