@@ -3,19 +3,26 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { FirebaseError, initializeApp } from "firebase/app";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../backend/services/firebase";
+import {
+  collection,
+  setDoc,
+  getFirestore,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "../../backend/services/Firebase.ts";
 
 const signupPage = () => {
-  const dateNow = new Date();
   const navigate = useNavigate();
   const auth = getAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (event: React.FormEvent) => {
     event?.preventDefault();
+    setLoading(true);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -23,13 +30,13 @@ const signupPage = () => {
         email,
         password
       );
-      const user = userCredential.user;
-      const docRef = await addDoc(collection(db, "users"), {
+      const firebaseUser = userCredential.user;
+      const docRef = await setDoc(doc(db, "users", firebaseUser.uid), {
         username: username,
-        email: user.email,
-        createdAt: dateNow,
+        email: firebaseUser.email,
+        createdAt: serverTimestamp(),
       });
-      console.log("Document written with ID: ", docRef.id);
+      console.log("Document written with ID: ", firebaseUser.uid);
       console.log("User successfully created");
       alert("Sign up successful!");
       navigate("/login");

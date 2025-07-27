@@ -3,7 +3,7 @@ import LoginPage from "../pages/LoginPage.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "../pages/LandingPage.tsx";
 import SignupPage from "../pages/signupPage.tsx";
-import "../../backend/services/firebase.js";
+import "../../backend/services/Firebase.ts";
 
 function App() {
   return (

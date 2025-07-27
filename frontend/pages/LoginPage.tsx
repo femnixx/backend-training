@@ -3,10 +3,9 @@ import { Outlet, Link } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError, initializeApp } from "firebase/app";
 import { useNavigate } from "react-router-dom";
-
+import { auth } from "../../backend/services/Firebase.ts";
 const LoginPage = () => {
   const navigate = useNavigate();
-  const auth = getAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
