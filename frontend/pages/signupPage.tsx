@@ -1,10 +1,13 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, data } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { FirebaseError, initializeApp } from "firebase/app";
 import { useNavigate } from "react-router-dom";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../backend/services/firebase";
 
 const signupPage = () => {
+  const dateNow = new Date();
   const navigate = useNavigate();
   const auth = getAuth();
   const [username, setUsername] = useState("");
@@ -21,6 +24,12 @@ const signupPage = () => {
         password
       );
       const user = userCredential.user;
+      const docRef = await addDoc(collection(db, "users"), {
+        username: username,
+        email: user.email,
+        createdAt: dateNow,
+      });
+      console.log("Document written with ID: ", docRef.id);
       console.log("User successfully created");
       alert("Sign up successful!");
       navigate("/login");
@@ -41,7 +50,7 @@ const signupPage = () => {
             <Link to="/" className="text-start mt-5 absolute left-5">
               Click me to come back
             </Link>
-            <p className="text-center mt-5">Welcome back</p>
+            <p className="text-center mt-5">Create An Account</p>
           </div>
           <div className="flex flex-col gap-y-5 ps-5 mt-5">
             <div className="">
