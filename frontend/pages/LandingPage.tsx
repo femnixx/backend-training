@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { useNavigate } from "react-router-dom";
+import PickImage from "../components/PickImage.tsx";
 
 const LandingPage = () => {
-  const [username, setUsername] = useState("Guest");
+  const [username, setUsername] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const navigate = useNavigate();
 
@@ -39,14 +40,14 @@ const LandingPage = () => {
               "No user profile document found for UID: ",
               firebaseUser.uid
             );
-            setUsername("Guest");
+            setUsername(null);
           }
         } catch (error) {
           console.error("Error fetching profile: ", error);
-          setUsername("Error");
+          setUsername(null);
         }
       } else {
-        setUsername("Guest");
+        setUsername(null);
       }
       setLoadingUser(false);
     });
@@ -70,10 +71,16 @@ const LandingPage = () => {
           <p className="text-end justify-end">Hello, {username}</p>
         </div>
       </div>
-      <Link to="/login">Link to login</Link>
-      <Link to="/signup">Link to Signup</Link>
-
-      <button onClick={handleSignout}>Sign out</button>
+      <Link to="/login" className="w-fit">
+        Link to login
+      </Link>
+      <Link to="/signup" className="w-fit">
+        Link to Signup
+      </Link>
+      <button onClick={handleSignout} className="hover:cursor-pointer w-fit">
+        Sign out
+      </button>
+      if (username != null) {<PickImage />}
     </div>
   );
 };
