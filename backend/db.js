@@ -1,18 +1,5 @@
-import mongodb, { MongoClient } from 'mongodb';
+import { createClient } from "@supabase/supabase-js/dist/index.cjs";
 
-const client = new MongoClient(process.env.MONGO_URI);
-let db;
-
-export async function connectDB() {
-     try { 
-          await client.connect();
-          console.log("Connected to MongoDB");    
-          db = client.db('training');
-          return db;          
-     } catch (e) { 
-          console.error(e);
-          process.exit(1);
-     } 
-}
-
-export { db };
+const supabaseUrl = 'https://fcyoywhnhofeillcmfos.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+export const supabase = createClient(supabaseUrl, supabaseKey)

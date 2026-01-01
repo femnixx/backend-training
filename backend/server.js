@@ -16,6 +16,7 @@ app.use('/api/products', productRoutes);
 
 app.get('/', (req, res) => {
     res.send("Hello World!");
+    console.log("Backend working!")
 });
 
 app.listen(process.env.PORT, () => {
