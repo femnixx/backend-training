@@ -19,28 +19,26 @@ userRoutes.get('/users/me', async (req, res) => {
             return res.status(401).json({ message: "No token provided" });
         }
 
-        // IMPORTANT: Pass the token here
         const { data, error } = await supabase.auth.getUser(token);
 
         if (error || !data?.user) { 
             return res.status(401).json({ message: "Invalid session" });       
         }
 
-        // Log this to your TERMINAL to see what Supabase found
         console.log("Supabase User Data:", data.user.user_metadata);
-        
+        const userId = data.user.id;
+        const {data: findUsername, error: findUsernameError } = await supabase
+        .from('users')
+        .select('username')
+        .eq('id', userId)
+        .single()
 
-        // Send a 200 (Success) with the JSON
+        if (findUsernameError) return res.status(404).json({ message: findUsernameError.message });
         return res.status(200).json({ 
-            id: data.user.id,
-            email: data.user.email,
-            // Use the exact key from your raw JSON
-            username: data.user.user_metadata.display_name || "Unknown" 
+            username: findUsername.username
         });
-
     } catch (e) {
         console.error("Backend Error:", e.message);
-        // If it hits here, it sends a 500, not a 204
         return res.status(500).json({ error: e.message }); 
     }
 });
@@ -83,23 +81,15 @@ userRoutes.post('/sign-up', async (req, res) => {
 userRoutes.post('/sign-in', async (req, res) => { 
    try {
     const { email, password } = req.body;
-    const { data: authData , error: authError } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
     });
-    if (authError) { 
-        return res.status(401).json({ message: "Invalid email or password" });
-    }
-    console.log(`Succesfully signed in with email: ${authData.id}`);
-    res.status(200).json({ 
-        message: `Successfuly signed in with email: ${email}`,
-        token: authData.session.access_token,
-        user: { 
-            id: authData.user.id,
-            email: authData.user.email,
-            display_name: authData.user.user_metadata.display_name
-        } 
-    });
+    if (error) return res.status(401).json({ message: error.message });
+
+    console.log("Login succesful for user:", data.user?.id);
+
+    return res.status(200).json({ message: "Sign in worked successfully", userId: data.user.id, session: data.session });
    } catch (e) { 
         console.error(`Server error: ${e}`)
         res.status(500).json({ message: "Internal Service Error: ", e });

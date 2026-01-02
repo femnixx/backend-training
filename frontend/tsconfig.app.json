@@ -5,7 +5,7 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],   // <-- added "node" here
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -24,5 +24,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": [
+    "src",                        // existing source folder
+    "../**/*.tsx",                 // <-- include .tsx files outside src
+    "../**/*.ts"                   // optional: include TS files outside src
+  ]
 }
