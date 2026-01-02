@@ -1,7 +1,5 @@
 import 'dotenv/config';
-import { connectDB } from "./db.js";
 import { authMiddleware } from "./authMiddleware.js";
-import { ObjectId } from "mongodb";
 import express from 'express';
 
 const productRoutes = express.Router();

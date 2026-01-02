@@ -23,10 +23,8 @@ const SignIn = () => {
 
     const result = await response.json();
     if (response.ok) { 
-      const myToken = result.token;
-      sessionStorage.setItem('token', myToken);
-      console.log("Sign-in successful: Token saved");
-      window.alert("Sign in successful!");
+      sessionStorage.setItem('token', result.token);
+      window.alert(`Sign in successful with ID: ${result.user.id}`);
       window.location.href = '/';
     }
     if (!response.ok) { 
