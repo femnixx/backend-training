@@ -50,7 +50,7 @@ return (
         Hello, {username ? username : 'Loading...'}
       </p>
 
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout} className='hover:cursor-pointer w-fit'>Logout</button>
 
       <div className="flex-col flex w-1/4 gap-y-4">
         <Link to="/create-product" className="border hover:bg-gray-100">

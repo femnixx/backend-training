@@ -6,6 +6,8 @@ const CreateProduct = () => {
   const [productType, setProductType] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [stock, setStock] = useState('');
+  const [image, setImage] = useState('');
 
   const token = sessionStorage.getItem('token');
 
@@ -65,6 +67,8 @@ const CreateProduct = () => {
           <textarea name="productDescription" id="productDescription" className='border p-15' placeholder='desc of your product' value={productDescription} onChange={(e) => setProductDescription(e.target.value)}></textarea>
           <p>Price</p>
           <input type="number" className='border' name='price' id='price' value={price} onChange={(e) => setPrice(e.target.value)}/>
+          <p>Stock</p>
+          <input type="number" className='border' name='stock' id='stock' value={stock} onChange={(e) => setStock(e.target.value)}/>
         </div>
         <button className='border flex mt-2' type='submit'>Submit</button>
       </form>
