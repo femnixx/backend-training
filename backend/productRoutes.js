@@ -31,14 +31,34 @@ productRoutes.post('/post-product', async (req, res) => {
             type: productType
         })
         .select(); 
+    
 
     if (productError) {
         console.error("Supabase Database Error:", productError.message);
         return res.status(400).json({ message: productError.message });
     }
+    const { data: selectProduct, error: errorSelectProduct } = await supabase
+    .from('users')
+    .select('products')
+    .eq('id', userId)
+    .single();
 
+    if (errorSelectProduct) return res.status(400).json({ message: "No user found" });
+    
+    const incrementProduct = parseInt(selectProduct.products || 0) + 1; 
+    const { data: updateProduct, error: errorProduct } = await supabase
+    .from('users')
+    .update({ products: incrementProduct})
+    .eq('id', userId)
+    .select();
+    if (errorProduct) return res.status(400).json({ message: `Failed to update product for user: ${userId}`});
+    
     console.log("Inserted Row:", data);
-    return res.status(200).json({ message: "Product successfully posted", data });
+    return res.status(200).json({ 
+        message: `Successfully posted with data`,
+        data: data[0],
+        productUpdatedMessage: `Product count is now ${incrementProduct}`
+    });
 });
 
 
