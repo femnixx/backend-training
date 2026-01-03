@@ -1,5 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
+import { Dropzone } from '../frontend/components/dropzone.tsx';
+import { useSupabaseUpload } from './hooks/use-supabase-upload.ts';
+import { supabaseClient } from './SupabaseClient.ts';
+import { useNavigate } from 'react-router-dom';
 
 const CreateProduct = () => {
   const [productName, setproductName] = useState('');
@@ -8,8 +12,24 @@ const CreateProduct = () => {
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
   const [image, setImage] = useState('');
+  
+  const navigate = useNavigate();
 
-  const token = sessionStorage.getItem('token');
+  const FileUpload = async () => {
+    const { data, error } = await supabaseClient.auth.getSession();
+    if (error) { 
+      console.error(`Failed fetching user session, ${error.message}`);
+      navigate('/sign-in');          
+    } 
+    const userId = data.session.user.id;
+    const props = useSupabaseUpload({ 
+      bucketName: 'products',
+      path: `products/${userId}`,
+      allowedMimeTypes: ['image/*'],
+      maxFiles: 5,
+      maxFileSize: 10 * 1024 * 1024,
+    })
+  }
 
   const product = { 
     productName,
@@ -21,12 +41,12 @@ const CreateProduct = () => {
   const handleSubmit = async (e: React.FormEvent) => { 
     e.preventDefault();
 
+
     try { 
       const response = await fetch('http://localhost:5000/api/products/post-products', { 
         method: 'POST',
         headers: { 
           'Content-Type' : 'application/json',
-          'Authorization' : `Bearer ${token}`
         },
         body: JSON.stringify(product)
       });
@@ -70,6 +90,7 @@ const CreateProduct = () => {
           <p>Stock</p>
           <input type="number" className='border' name='stock' id='stock' value={stock} onChange={(e) => setStock(e.target.value)}/>
         </div>
+
         <button className='border flex mt-2' type='submit'>Submit</button>
       </form>
     </div>

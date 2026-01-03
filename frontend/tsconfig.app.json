@@ -5,8 +5,18 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["vite/client", "node"],   // <-- added "node" here
+    "types": ["vite/client", "node"],
     "skipLibCheck": true,
+
+    /* --- ADD THESE TWO LINES --- */
+    "baseUrl": ".",
+    "paths": {
+      "@/lib/*": ["./lib/*"],
+      "@/components/*": ["./components/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/*": ["./*"]
+    },
+    /* --------------------------- */
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -16,17 +26,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    /* ... rest of your config */
   },
   "include": [
-    "src",                        // existing source folder
-    "../**/*.tsx",                 // <-- include .tsx files outside src
-    "../**/*.ts"                   // optional: include TS files outside src
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./**/*.json"
   ]
 }
