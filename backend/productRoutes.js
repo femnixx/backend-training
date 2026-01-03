@@ -41,4 +41,6 @@ productRoutes.post('/post-product', async (req, res) => {
     return res.status(200).json({ message: "Product successfully posted", data });
 });
 
+
+
 export default productRoutes;

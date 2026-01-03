@@ -8,7 +8,6 @@ const Homepage = () => {
   const navigate = useNavigate()
 
  const fetchUserData = async () => {
-  
   try { 
     const { data: currentSession, error: sessionError } = await supabaseClient.auth.getSession();
     if (sessionError || !currentSession?.session) {
